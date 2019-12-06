@@ -5,6 +5,8 @@ import cv2
 
 import numpy as np
 
+from PIL import Image, ImageFont, ImageDraw
+
 import tensorflow.python.keras.backend as K
 from tensorflow.python.keras.models import load_model
 from tensorflow.python.keras.layers import Input
@@ -17,8 +19,8 @@ class YOLO(object):
         'model_path': 'model_data/yolo.h5',
         'anchors_path': 'model_data/yolo_anchors.txt',
         'classes_path': 'model_data/coco_classes.txt',
-        'score': .3,
-        'iou': .45,
+        'score': .5,
+        'iou': .3,
         'model_image_size': (320, 320),
         'text_size': 3,
         'gpu_num': 1
@@ -83,7 +85,7 @@ class YOLO(object):
         
         return boxes, scores, classes
     
-    def detect_image(self, image):
+    def _detect_image(self, image):
         if self.model_image_size != (None, None):
             assert self.model_image_size[0] % 32 == 0, 'should be a multiple of 32'
             assert self.model_image_size[1] % 32 == 0, 'should be a multiple of 32'
@@ -122,28 +124,17 @@ class YOLO(object):
 
             cv2.rectangle(image, (left, top), (right, bottom), self.colors[c], thickness)
 
-            (text_w, text_h), baseline = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, thickness / self.text_size, 1)
+            (text_w, text_h), baseline = cv2.getTextSize(label, cv2.FONT_HERSHEY_COMPLEX, thickness / self.text_size, 1)
 
             cv2.rectangle(image, (left, top), (left + text_w, top - text_h - baseline), self.colors[c], thickness=cv2.FILLED)
-            cv2.putText(image, label, (left, top - 2), cv2.FONT_HERSHEY_SIMPLEX, thickness / self.text_size, (0, 0, 0), 1)
+            cv2.putText(image, label, (left, top - 2), cv2.FONT_HERSHEY_COMPLEX, thickness / self.text_size, (0, 0, 0), 1)
 
             objects_list.append([top, left, bottom, right, mid_v, mid_h, label, scores])
         
         return image, objects_list
     
     def detect(self, image):
-        return self.detect_image(image)
+        return self._detect_image(image)
 
     def close_session(self):
         self.session.close()
-
-
-if __name__ == "__main__":
-   yolo = YOLO()
-   image = ''
-   
-   r_image, object_list = yolo.detect(image)
-   
-   cv2.imshow(image, r_image) 
-   
-   yolo.close_session()

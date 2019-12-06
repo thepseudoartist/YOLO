@@ -125,7 +125,7 @@ def preprocess(image, target_size, gt_boxes=None):
     scale = min(iw / w, ih / h)
     nw, nh = int(scale * w), int(scale * h)
 
-    image_resized = cv2.resize(image, (nw, nh), interpolation=cv2.INTER_CUBIC)
+    image_resized = cv2.resize(image, (nw, nh), interpolation=cv2.INTER_AREA)
     image_padded = np.full(shape=(ih, iw, 3), fill_value=128.)
 
     dw, dh = (iw - nw) // 2, (ih - nh) // 2
