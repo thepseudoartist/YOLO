@@ -13,7 +13,7 @@ from tensorflow.python.keras.layers import Input
 
 from yolo.model import YOLOEval, YOLOBody, TinyYOLO
 from yolo.utils import preprocess
-from detect_img import YOLO
+from main import YOLO
 
 import multiprocessing
 from multiprocessing import Pipe
