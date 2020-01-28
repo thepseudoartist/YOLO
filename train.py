@@ -23,9 +23,9 @@ def _main():
     is_tiny = len(anchors) == 6
     
     if is_tiny: model = create_tiny(input_shape, anchors, num_classes,
-                                  freeze_body=2, weights_path='model_data/tiny_yolo_weights.h5')
+                                  freeze_body=2, weights_path='model_data/yolo_tiny.h5')
     else: model = create(input_shape, anchors, num_classes, 
-                        freeze_body=2, weights_path='model_data/yolo_weights.h5')
+                        freeze_body=2, weights_path='model_data/yolo.h5')
 
     logging = TensorBoard(log_dir=log_dir)
     checkpoint = ModelCheckpoint(log_dir + 'ep{epoch: 04d} - loss{loss: .4f} - val_loss{val_loss: .4f}.h5',
@@ -79,6 +79,9 @@ def _main():
         model.compile(optimizer=Adam(lr=1e-4), loss={
             'yolo_loss': lambda y_true, y_pred: y_pred
         })
+        
+        model.summary()
+        return
 
         batch_size = 32
 
@@ -135,7 +138,7 @@ def create(input_shape,
     ))
 
     if load_pretrained:
-        model_body.load_weights(weights_path, by_name=True, skip_mismatch=True)
+        model_body.load_weights(weights_path, by_name=True)
         
         print('Load weights {}'.format(weights_path))
 

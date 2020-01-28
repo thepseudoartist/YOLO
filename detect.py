@@ -22,7 +22,7 @@ import mss
 import time
 
 start_time = time.time()
-display_time = 1
+display_time = 2
 fps = 0
 sct = mss.mss()
 yolo = YOLO()
@@ -75,8 +75,8 @@ def _detect_realtime():
     p1 = multiprocessing.Process(target=grab_mss_screen, args=(p_input, ))
     p2 = multiprocessing.Process(target=show_mss_screen, args=(p_output, ))
 
-    p1.start()
-    p2.start()
+    p1.run()
+    p2.run()
 
 def _detect_webcam():
     global fps, start_time, display_time, yolo

@@ -46,7 +46,7 @@ def Body(x):
 
     return x
 
-def UpperLayer(x, num_filters, out_filters):
+def  UpperLayer(x, num_filters, out_filters):
     '''6 Conv2D_BN_Leaky layers followed by Conv2D_Linear layer'''
     x = compose(
         YOLOConv2D_BN_Leaky(num_filters, (1, 1)),
@@ -83,7 +83,7 @@ def YOLOBody(inputs, num_anchors, num_classes):
     )(x)
 
     x = Concatenate()([x, model.layers[92].output])
-    x, y3 = UpperLayer(x, 128, num_anchors, (num_classes + 5))
+    x, y3 = UpperLayer(x, 128, num_anchors * (num_classes + 5))
 
     return Model(inputs, [y1, y2, y3])
 

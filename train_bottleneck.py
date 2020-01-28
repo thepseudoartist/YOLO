@@ -23,7 +23,7 @@ def _main():
     input_shape = (416, 416)
 
     model, bottleneck_model, last_layer_model = _create(input_shape, anchors, num_classes, freeze_body=2, 
-                                                weights_path='model_path/yolo_weights.h5')
+                                                weights_path='model_path/yolo.h5')
     
     logging = TensorBoard(log_dir=log_dir)
     checkpoint = ModelCheckpoint(log_dir + 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
